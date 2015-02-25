@@ -1,6 +1,10 @@
 #!/bin/bash
 
-FORMAT="ext4"
+FORMAT="ext4"  # If using Scalr, set this as Account Scope Global Variable and require to be set at lower scope
+
+if [[ -f /etc/redhat-release ]]; then
+    yum update -y -q util-linux-ng
+fi
 
 echo -e "\n\n#########################"
 echo -e "Starting block device discovery"
@@ -39,4 +43,5 @@ lsblk --nodeps --noheadings --pairs -o fstype,name,mountpoint,size | while read 
   fi;
 done
 echo -e "Complete!\n"
-
+echo -e "Block Device Mountpoint Status:\n"
+lsblk -o ,name,fstype,size,mountpoint
