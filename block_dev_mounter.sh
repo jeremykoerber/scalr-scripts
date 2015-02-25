@@ -1,7 +1,9 @@
 #!/bin/bash
+set -o errexit
+set -o nounset
 
-# If using Scalr, set FORMAT as an Account or Scalr scope Global Variable and require it to be set at lower scope.
-: ${FORMAT:="ext4"} # This sets the default FS Format to ext4 if FORMAT isn't already defined in an env var.
+# If using Scalr, set BLOCK_DEV_FS as an Account or Scalr scope Global Variable and require it to be set at lower scope.
+: ${BLOCK_DEV_FS:="ext4"} # This sets the default FS Format to ext4 if BLOCK_DEV_FS isn't already defined in an env var.
 
 if [[ -f /etc/redhat-release ]]; then
     yum update -y -q util-linux-ng
@@ -17,12 +19,12 @@ lsblk --nodeps --noheadings --pairs -o fstype,name,mountpoint,size | while read 
   echo -e "-DEVICE FOUND-\n   FStype = $FSTYPE\n   Name = $NAME\n   Mountpoint = $MOUNTPOINT\n   Size = $SIZE\n"
   if ( [[ ! $MOUNTPOINT ]] && [[ ! $FSTYPE ]] ) ; then
     echo -e "   $NAME will be formatted and mounted at $MOUNTAT"
-    echo -e "   Formatting $NAME with $FORMAT\n"
-    mkfs.$FORMAT /dev/$NAME >> /tmp/block_dev_format.log
+    echo -e "   Formatting $NAME with $BLOCK_DEV_FS\n"
+    mkfs.$BLOCK_DEV_FS /dev/$NAME >> /tmp/block_dev_format.log
     echo -e "   Making directory for mountpoint: $MOUNTAT"
     mkdir -p $MOUNTAT
     echo -e "   Mounting $NAME at $MOUNTAT"
-    sed -i "/$NAME/d" /etc/fstab && sed -i "$ a\/dev\/$NAME     $MOUNTAT  $FORMAT     defaults,nofail        0 2" /etc/fstab
+    sed -i "/$NAME/d" /etc/fstab && sed -i "$ a\/dev\/$NAME     $MOUNTAT  $BLOCK_DEV_FS     defaults,nofail        0 2" /etc/fstab
     mount /dev/$NAME
     mount | grep -q "^\/dev\/${NAME}" &&
     echo -e "   SUCCESS!\n\n" ||
@@ -32,7 +34,7 @@ lsblk --nodeps --noheadings --pairs -o fstype,name,mountpoint,size | while read 
     echo -e "   Making directory for mountpoint: $MOUNTAT"
     mkdir -p $MOUNTAT
     echo -e "   Mounting $NAME at $MOUNTAT"
-    sed -i "/$NAME/d" /etc/fstab && sed -i "$ a\/dev\/$NAME     $MOUNTAT  $FORMAT     defaults,nofail        0 2" /etc/fstab
+    sed -i "/$NAME/d" /etc/fstab && sed -i "$ a\/dev\/$NAME     $MOUNTAT  $BLOCK_DEV_FS     defaults,nofail        0 2" /etc/fstab
     mount /dev/$NAME
     mount | grep -q "^\/dev\/${NAME}" &&
     echo -e "   SUCCESS!\n\n" ||
