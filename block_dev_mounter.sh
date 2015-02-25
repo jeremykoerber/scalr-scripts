@@ -44,4 +44,4 @@ lsblk --nodeps --noheadings --pairs -o fstype,name,mountpoint,size | while read 
 done
 echo -e "Complete!\n"
 echo -e "Block Device Mountpoint Status:\n"
-lsblk -o ,name,fstype,size,mountpoint
+lsblk -o name,fstype,size,mountpoint
