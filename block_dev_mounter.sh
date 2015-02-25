@@ -1,6 +1,7 @@
 #!/bin/bash
 
-FORMAT="ext4"  # If using Scalr, set this as Account Scope Global Variable and require to be set at lower scope
+# If using Scalr, set FORMAT as an Account or Scalr scope Global Variable and require it to be set at lower scope.
+${FORMAT:="ext4"} # This sets the default FS Format to ext4 if FORMAT isn't already defined in an env var.
 
 if [[ -f /etc/redhat-release ]]; then
     yum update -y -q util-linux-ng
