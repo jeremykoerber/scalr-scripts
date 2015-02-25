@@ -2,9 +2,9 @@
 
 FORMAT="ext4"
 
-echo -e "\n\n#################################"
-echo -e "#Starting block device discovery#"
-echo -e "#################################\n"
+echo -e "\n\n#########################"
+echo -e "Starting block device discovery"
+echo -e "#########################\n"
 
 lsblk --nodeps --noheadings --pairs -o fstype,name,mountpoint,size | while read lsblk_line; do
   eval $lsblk_line
