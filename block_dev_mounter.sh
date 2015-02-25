@@ -17,7 +17,7 @@ lsblk --nodeps --noheadings --pairs -o fstype,name,mountpoint,size | while read 
   if ( [[ ! $MOUNTPOINT ]] && [[ ! $FSTYPE ]] ) ; then
     echo -e "   $NAME will be formatted and mounted at $MOUNTAT"
     echo -e "   Formatting $NAME with $FORMAT\n"
-    mkfs.$FORMAT /dev/$NAME
+    mkfs.$FORMAT /dev/$NAME >> /tmp/block_dev_format.log
     echo -e "   Making directory for mountpoint: $MOUNTAT"
     mkdir -p $MOUNTAT
     echo -e "   Mounting $NAME at $MOUNTAT"
